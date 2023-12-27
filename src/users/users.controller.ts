@@ -7,9 +7,9 @@ export class UsersController {
   constructor(private usersService: UsersService) { };
 
   @Post()
-  async singUp(
+  async createUser(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
   ): Promise<void> {
-    return await this.usersService.signUp(createUserDto);
+    return await this.usersService.createUser(createUserDto);
   }
 }

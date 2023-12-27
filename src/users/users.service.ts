@@ -6,7 +6,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 export class UsersService {
   constructor(private usersRepository: UsersRepository) { }
 
-  async signUp(createUserDto: CreateUserDto): Promise<void> {
+  async createUser(createUserDto: CreateUserDto): Promise<void> {
     try {
       await this.usersRepository.createUser(createUserDto);
     } catch (error) {
