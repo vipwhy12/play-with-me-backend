@@ -10,21 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 저장소 체크아웃
-        uses: actions/checkout@v2
-        with:
-          # 원하는 Node.js 버전 설정
-          ref: v2
-          node-version: 16
-
       - name: Node.js 설정
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: npm 의존성 설치
-        run: npm install
-        working-directory: ./play-with-me-backend  # 작업 디렉토리를 'play-with-me-backend'로 설정
 
       - name: 서버에서 스크립트 실행
         uses: appleboy/ssh-action@master
