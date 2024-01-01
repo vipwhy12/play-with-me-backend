@@ -42,6 +42,6 @@ jobs:
             # npm 개발 서버 시작
             npm run start:production
             
-            # pm2 재시작
-            pm2 restart
+      - name: 서버 실행 멈춤
+        run: npm stop
 
