@@ -15,4 +15,10 @@ export class UsersRepository {
     const user = this.userRepository.create({ name, email, password });
     return await this.userRepository.save(user);
   }
+
+  async singIn(email: string): Promise<User> {
+    return await this.userRepository.findOneByOrFail({
+      email: email,
+    });
+  }
 }

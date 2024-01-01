@@ -12,14 +12,18 @@ export class CreateUserDto {
   @IsString()
   readonly name: string;
 
-  @IsEmail()
   @IsNotEmpty()
+  @IsEmail()
+  @MinLength(5)
+  @MaxLength(320)
   readonly email: string;
 
   @IsNotEmpty()
   @IsString()
-  @MinLength(4)
-  @MaxLength(30)
-  @Matches('^[a-zA-Z0-9\\s]+$', undefined, { each: true })
+  @MinLength(8)
+  @MaxLength(50)
+  @Matches(/^[a-zA-Z0-9]*$/, {
+    message: '💥 비밀번호는 영어와 숫자만 가능합니다',
+  })
   readonly password: string;
 }
