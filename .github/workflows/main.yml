@@ -4,17 +4,51 @@ on:
   push:
     branches:
       - main
+
 jobs:
   AUTO_DEPLOY:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Run scripts in server
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v2
+        with:
+          # 원하는 Node.js 버전 설정
+          ref: v2
+          node-version: 16
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: npm 의존성 설치
+        run: npm install
+        working-directory: ./play-with-me-backend  # 작업 디렉토리를 'play-with-me-backend'로 설정
+
+      - name: 서버에서 스크립트 실행
         uses: appleboy/ssh-action@master
         with:
           password: ${{ secrets.PASSWORD }}
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
-          script: ${{ secrets.SCRIPT }}
+          script: |
+            #!/bin/bash
+            echo "서버에서 사용자 지정 스크립트 실행 중"
+            
+            # 'play-with-me-backend' 디렉토리로 이동
+            cd play-with-me-backend
+            
+            # Git pull 실행
+            git pull
+            
+            # npm 패키지 설치
+            npm install
+            
+            # npm 개발 서버 시작
+            npm start:production
+            
+            # pm2 재시작
+            pm2 restart
+
