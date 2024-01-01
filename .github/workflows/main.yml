@@ -32,6 +32,9 @@ jobs:
             
             # Git pull 실행
             git pull
+
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh      
             
             # npm 패키지 설치
             npm install
