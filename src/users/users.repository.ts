@@ -11,9 +11,15 @@ export class UsersRepository {
   ) { }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const { name, email, password } = createUserDto;
-    const user = this.userRepository.create({ name, email, password });
-    return await this.userRepository.save(user);
+    return await this.userRepository.save(createUserDto);
+  }
+
+  async existUserEmail(email: string): Promise<boolean> {
+    return await this.userRepository.exist({
+      where: {
+        email,
+      },
+    });
   }
 
   async getUserByEmail(email: string): Promise<User> {

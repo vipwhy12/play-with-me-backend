@@ -1,25 +1,22 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { User } from './user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private usersRepository: UsersRepository) { }
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
-    try {
-      //TODO : 회원 가입 직후 로그인 처리 될 수 있도록 인증 인가 로직 추가하기
-      return await this.usersRepository.createUser(createUserDto);
-    } catch (error) {
-      if (error.errno === 1062) {
-        throw new HttpException(
-          '💥이미 존재하는 아이디입니다!',
-          HttpStatus.CONFLICT,
-        );
-      }
-      throw error;
+  async createUser(user: CreateUserDto): Promise<User> {
+    const isEmailExists = await this.usersRepository.existUserEmail(user.email);
+
+    if (isEmailExists) {
+      throw new BadRequestException('💥이미 존재하는 이메일입니다!');
     }
+
+    const newUser = await this.usersRepository.createUser(user);
+
+    return newUser;
   }
 
   async getUserByEmail(email: string): Promise<User> {
