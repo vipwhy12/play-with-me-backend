@@ -21,4 +21,8 @@ export class UsersService {
       throw error;
     }
   }
+
+  async getUserByEmail(email: string): Promise<User> {
+    return this.usersRepository.getUserByEmail(email);
+  }
 }

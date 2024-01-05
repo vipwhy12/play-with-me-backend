@@ -15,4 +15,12 @@ export class UsersRepository {
     const user = this.userRepository.create({ name, email, password });
     return await this.userRepository.save(user);
   }
+
+  async getUserByEmail(email: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
+  }
 }
