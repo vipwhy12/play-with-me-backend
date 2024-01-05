@@ -1,11 +1,13 @@
 import { AuthCredentialsDto } from './dto/auth-credential.dto';
 import { AuthInfoDto } from './dto/auth-info.dto';
+import { AuthRegister } from './dto/auth-register.dto';
 import { ConfigService } from '@nestjs/config';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 
 import * as bcrypt from 'bcrypt';
+import { TokenResponseDto } from './dto/auth-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +17,23 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) { }
 
-  async loginUser(user: AuthInfoDto) {
+  //✨회원가입
+  async registerWithEmail(user: AuthRegister): Promise<TokenResponseDto> {
+    const hash = await bcrypt.hash(
+      user.password,
+      parseInt(this.configService.get('LOGIN_HASH_ROUND')),
+    );
+
+    const newUser = await this.usersService.createUser({
+      ...user,
+      password: hash,
+    });
+
+    //회원가입 완료 후 로그인
+    return this.loginUser(newUser);
+  }
+
+  async loginUser(user: AuthInfoDto): Promise<TokenResponseDto> {
     return {
       accessToken: this.signToken(user, false),
       refreshToken: this.signToken(user, true),
@@ -23,7 +41,7 @@ export class AuthService {
   }
 
   //🪙토큰발급
-  signToken(user: AuthInfoDto, isRefreshToken: boolean) {
+  signToken(user: AuthInfoDto, isRefreshToken: boolean): string {
     const payload = {
       email: user.email,
       name: user.name,
@@ -36,7 +54,7 @@ export class AuthService {
     });
   }
 
-  async validateUser(user: AuthCredentialsDto): Promise<any> {
+  async validateUser(user: AuthCredentialsDto): Promise<AuthInfoDto> {
     const existingUser = await this.usersService.getUserByEmail(user.email);
 
     if (!existingUser) {
