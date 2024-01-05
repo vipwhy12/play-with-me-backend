@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { ChatsModule } from './chats/chats.module';
 import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -21,6 +22,9 @@ import { AuthModule } from './auth/auth.module';
       database: 'playwithme',
       synchronize: process.env.NODE_ENV !== 'production', // 🚨 프로덕션에서는 동기화 비활성화
       autoLoadEntities: true,
+    }),
+    JwtModule.register({
+      global: true,
     }),
     UsersModule,
     ChatsModule,
