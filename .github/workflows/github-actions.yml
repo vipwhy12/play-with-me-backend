@@ -1,0 +1,50 @@
+# github repository actions 페이지에 나타날 이름
+name: CI/CD using github actions & docker
+
+# event trigger
+# main이나 develop 브랜치에 push가 되었을 때 실행
+on:
+  push:
+    branches: ['main']
+
+permissions:
+  contents: read
+
+jobs:
+  CI-CD:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          npm: true
+
+      - name: 서버에서 스크립트 실행
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            #!/bin/bash
+            echo "서버에서 사용자 지정 스크립트 실행 중"
+
+            # 'play-with-me-backend' 디렉토리로 이동
+            cd play-with-me-backend
+
+            # Git pull 실행
+            git pull
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh      
+
+            # npm 패키지 설치
+            npm install
+
+            sudo su
+
+            sudo docker stop pwm-backend
+            sudo docker rm pwm-backend
+
+            sudo docker build -t pwm:latest .
