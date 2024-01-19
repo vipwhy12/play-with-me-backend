@@ -1,16 +1,17 @@
+import { ChatsModel } from 'src/chats/chats.entity';
 import {
-  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
-import * as bcrypt from 'bcrypt';
 
 @Entity()
 @Unique(['email'])
-export class User {
+export class UsersModel {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -26,8 +27,7 @@ export class User {
   @Column()
   password: string;
 
-  @BeforeInsert()
-  private async beforeInsert() {
-    this.password = await bcrypt.hash(this.password, 10);
-  }
+  @ManyToMany(() => ChatsModel, (chat) => chat.users)
+  @JoinTable()
+  chats: ChatsModel[];
 }

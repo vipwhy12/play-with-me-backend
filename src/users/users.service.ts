@@ -1,13 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
-import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UsersModel } from './user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(private usersRepository: UsersRepository) { }
 
-  async createUser(user: CreateUserDto): Promise<User> {
+  async createUser(user: CreateUserDto): Promise<UsersModel> {
     const isEmailExists = await this.usersRepository.existUserEmail(user.email);
 
     if (isEmailExists) {
@@ -19,7 +19,7 @@ export class UsersService {
     return newUser;
   }
 
-  async getUserByEmail(email: string): Promise<User> {
+  async getUserByEmail(email: string): Promise<UsersModel> {
     return this.usersRepository.getUserByEmail(email);
   }
 }
