@@ -1,8 +1,8 @@
 import { UsersModel } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
 import { Injectable } from '@nestjs/common';
+import { AuthRegisterDto } from 'src/auth/dto/auth-register.dto';
 
 @Injectable()
 export class UsersRepository {
@@ -11,8 +11,8 @@ export class UsersRepository {
     private userRepository: Repository<UsersModel>,
   ) { }
 
-  async createUser(createUserDto: CreateUserDto): Promise<UsersModel> {
-    return await this.userRepository.save(createUserDto);
+  async createUser(authRegisterDto: AuthRegisterDto): Promise<UsersModel> {
+    return await this.userRepository.save(authRegisterDto);
   }
 
   async existUserEmail(email: string): Promise<boolean> {
