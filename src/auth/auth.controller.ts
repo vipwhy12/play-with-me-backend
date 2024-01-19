@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guard/local-suth.guard';
-import { AuthRegister } from './dto/auth-register.dto';
+import { AuthRegisterDto } from './dto/auth-register.dto';
 import { ApiOperation } from '@nestjs/swagger';
 import { TokenResponseDto } from './dto/auth-token.dto';
 
@@ -12,9 +12,9 @@ export class AuthController {
   @Post('register')
   @ApiOperation({ summary: '회원가입 API', description: '유저 생성' })
   async register(
-    @Body() authRegister: AuthRegister,
+    @Body() authRegisterDto: AuthRegisterDto,
   ): Promise<TokenResponseDto> {
-    return await this.authService.registerWithEmail(authRegister);
+    return await this.authService.registerWithEmail(authRegisterDto);
   }
 
   @UseGuards(LocalAuthGuard)
