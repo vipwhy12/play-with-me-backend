@@ -7,6 +7,8 @@ import { UsersModule } from './users/users.module';
 import { ChatsModule } from './chats/chats.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { UsersModel } from 'src/users/user.entity';
+import { ChatsModel } from './chats/chats.entity';
 
 @Module({
   imports: [
@@ -22,6 +24,7 @@ import { JwtModule } from '@nestjs/jwt';
       database: 'playwithme',
       synchronize: process.env.NODE_ENV !== 'production', // 🚨 프로덕션에서는 동기화 비활성화
       autoLoadEntities: true,
+      entities: [UsersModel, ChatsModel],
     }),
     JwtModule.register({
       global: true,
