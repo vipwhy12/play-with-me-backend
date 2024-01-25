@@ -1,12 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ChatsRepository } from './chats.repository';
-import { CreateChatDto } from './dto/chat-create.dto';
+import { ChatRegisterDto } from './dto/chat-register.dto';
+import { ChatsModel } from './chats.entity';
 
 @Injectable()
 export class ChatsService {
-  constructor(private chatsRepository: ChatsRepository) { }
+  constructor(private chatsRepository: ChatsRepository) {}
 
-  async createChat(createChatDto: CreateChatDto) {
-    return await this.chatsRepository.createChat(createChatDto);
+  async registerChat(chatRegisterDto: ChatRegisterDto): Promise<ChatsModel> {
+    const newChat = this.chatsRepository.register(chatRegisterDto);
+
+    if (!newChat) {
+      throw new HttpException(
+        '🧨저장에 실패하였습니다',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return newChat;
   }
 }

@@ -7,7 +7,6 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { CreateChatDto } from './dto/chat-create.dto';
 import { ChatsService } from './chats.service';
 
 @WebSocketGateway({
@@ -16,7 +15,7 @@ import { ChatsService } from './chats.service';
   namespace: 'chats',
 })
 export class ChatsGateway implements OnGatewayConnection {
-  constructor(private readonly chatsService: ChatsService) { }
+  constructor(private readonly chatsService: ChatsService) {}
 
   @WebSocketServer() // WebSocket 서버 객체를 주입받을 수 있도록 설정
   server: Server;
@@ -46,13 +45,5 @@ export class ChatsGateway implements OnGatewayConnection {
     for (const chatId of data) {
       socket.join(chatId.toString());
     }
-  }
-
-  @SubscribeMessage('create_chat')
-  async createChat(
-    @MessageBody() data: CreateChatDto,
-    @ConnectedSocket() socket: Socket,
-  ) {
-    const chat = await this.chatsService.createChat(data);
   }
 }
