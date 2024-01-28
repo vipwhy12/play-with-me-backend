@@ -1,23 +1,10 @@
+import { BaseEntity } from 'src/core/base.entity';
 import { ChatsModel } from 'src/chats/chats.entity';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-  Unique,
-} from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, Unique } from 'typeorm';
 
 @Entity()
 @Unique(['email'])
-export class UsersModel {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
+export class UsersModel extends BaseEntity {
   @Column()
   name: string;
 

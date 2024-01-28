@@ -1,21 +1,9 @@
+import { BaseEntity } from 'src/core/base.entity';
 import { UsersModel } from 'src/users/user.entity';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  Generated,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Generated, ManyToMany } from 'typeorm';
 
 @Entity()
-export class ChatsModel {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
+export class ChatsModel extends BaseEntity {
   @Column()
   gameName: string;
 
