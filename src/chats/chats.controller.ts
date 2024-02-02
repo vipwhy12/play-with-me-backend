@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
 import { ChatsService } from './chats.service';
 import { ChatsModel } from './chats.entity';
 import { ChatRegisterDto } from './dto/chat-register.dto';
@@ -8,7 +8,12 @@ export class ChatsController {
   constructor(private readonly chatsService: ChatsService) {}
 
   @Post()
-  registerChat(@Body() ChatRegisterDto: ChatRegisterDto): Promise<ChatsModel> {
-    return this.chatsService.registerChat(ChatRegisterDto);
+  registerChat(@Body() chatRegisterDto: ChatRegisterDto): Promise<ChatsModel> {
+    return this.chatsService.registerChat(chatRegisterDto);
+  }
+
+  @Delete(':id')
+  deleteChat(@Param('id') id: number) {
+    return this.chatsService.deleteChat(id);
   }
 }

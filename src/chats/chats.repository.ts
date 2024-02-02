@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChatsModel } from './chats.entity';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { ChatRegisterDto } from './dto/chat-register.dto';
 
 @Injectable()
@@ -23,10 +23,18 @@ export class ChatsRepository {
       numberOfChat,
     });
 
+    return this.findOneChat(chat.id);
+  }
+
+  async findOneChat(id: number): Promise<ChatsModel> {
     return this.chatsRepository.findOne({
       where: {
-        id: chat.id,
+        id,
       },
     });
+  }
+
+  async deleteChat(id: number): Promise<DeleteResult> {
+    return await this.chatsRepository.delete({ id: id });
   }
 }
