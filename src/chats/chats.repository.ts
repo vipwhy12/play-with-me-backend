@@ -37,4 +37,17 @@ export class ChatsRepository {
   async deleteChat(id: number): Promise<DeleteResult> {
     return await this.chatsRepository.delete({ id: id });
   }
+
+  async countChats() {
+    return this.chatsRepository.count();
+  }
+
+  async getAllChat(take, page) {
+    const skip = (page - 1) * take;
+
+    return this.chatsRepository.findAndCount({
+      skip: skip,
+      take,
+    });
+  }
 }

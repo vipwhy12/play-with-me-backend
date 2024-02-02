@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ChatsService } from './chats.service';
 import { ChatsModel } from './chats.entity';
 import { ChatRegisterDto } from './dto/chat-register.dto';
@@ -15,5 +23,10 @@ export class ChatsController {
   @Delete(':id')
   deleteChat(@Param('id') id: number) {
     return this.chatsService.deleteChat(id);
+  }
+
+  @Get(':page')
+  getAllChat(@Param('page') page: number): Promise<ChatsModel[]> {
+    return this.chatsService.getAllChat(page);
   }
 }
