@@ -20,6 +20,9 @@ export class ChatsModel extends BaseEntity {
   @Generated('uuid')
   channel: string;
 
-  @ManyToMany(() => UsersModel, (user) => user.chats)
+  @ManyToMany(() => UsersModel, (user) => user.chats, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   users: UsersModel[];
 }
